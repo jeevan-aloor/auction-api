@@ -33,7 +33,7 @@ AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
     try {
         if(query1==undefined && query2==undefined ){
             console.log("hdhdk")
-            let data=await AuctionRegModel.find({status:true}) .select('name email phoneno productcategory productname productimage   productinitialrate paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status').limit(10).lean()
+            let data=await AuctionRegModel.find({status:true}) .select('name email phoneno productcategory address country productname productimage   productinitialrate paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status').limit(10).lean()
             res.send(data)
             console.log("approved user")
     //         let data = await AuctionRegModel.find({ status: true }).limit(10);
@@ -53,15 +53,18 @@ AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
     // res.send(data);
     // console.log('approved user');
 
-        }else if(query1!==undefined){
+        }else if(query1!==undefined && query2===undefined){
+            console.log("qqqq",query1,query2)
             let data=await AuctionRegModel.find({status:true ,productcategory:query1})
             res.send(data)
 
-        }else if(query2!==undefined){
+        }else if(query2!==undefined && query1===undefined){
+            console.log("tr",query1,query2)
             let data=await AuctionRegModel.find({status:true,productname:query2})
             res.send(data)
 
-        }else{
+        }else if(query1 && query2) {
+            console.log("trururr")
             let data=await AuctionRegModel.find({status:true,productcategory:query1,productname:query2})
             res.send(data)
 
@@ -158,7 +161,7 @@ AuctionRegisterRouter.get("/getPendinguser",async (req,res)=>{
     // res.send("regster auction")
     try {
         console.log("pppp")
-        let data=await AuctionRegModel.find({status:false}).select('name email phoneno productcategory productname  productinitialrate productimage paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status').limit(10).lean()
+        let data=await AuctionRegModel.find({status:false}).select('name email phoneno productcategory productname address country  productinitialrate productimage paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status').limit(10).lean()
         res.send(data)
         console.log("pending data")
         
