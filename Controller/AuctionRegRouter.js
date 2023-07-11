@@ -29,11 +29,12 @@ AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
     // res.send("regster auction")
     let query1=req.query.productcategory
     let query2=req.query.searchproduct
+    
      
     try {
         if(query1==undefined && query2==undefined ){
             console.log("hdhdk")
-            let data=await AuctionRegModel.find({status:true}) .select('name email phoneno productcategory address country productname productimage   productinitialrate paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status').limit(10).lean()
+            let data=await AuctionRegModel.find({status:true}).limit(10).lean()
             res.send(data)
             console.log("approved user")
     //         let data = await AuctionRegModel.find({ status: true }).limit(10);
@@ -53,19 +54,27 @@ AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
     // res.send(data);
     // console.log('approved user');
 
-        }else if(query1!==undefined && query2===undefined){
+        }else if(query1!==undefined && query2===undefined ){
             console.log("qqqq",query1,query2)
             let data=await AuctionRegModel.find({status:true ,productcategory:query1})
             res.send(data)
 
-        }else if(query2!==undefined && query1===undefined){
+        }
+        // else if(query3!==undefined){
+        //     console.log("qq3")
+        //     let data=await AuctionRegModel.find({status:true,productname:query3})
+        //     res.send(data)
+
+
+        // }
+        else if(query2!==undefined && query1===undefined){
             console.log("tr",query1,query2)
-            let data=await AuctionRegModel.find({status:true,productname:query2})
+            let data=await AuctionRegModel.find({status:true,producttype:query2})
             res.send(data)
 
         }else if(query1 && query2) {
             console.log("trururr")
-            let data=await AuctionRegModel.find({status:true,productcategory:query1,productname:query2})
+            let data=await AuctionRegModel.find({status:true,productcategory:query1,producttype:query2})
             res.send(data)
 
         }
@@ -156,12 +165,13 @@ AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
 //       console.error(error);
 //     }
 //   });
+// .select('name email phoneno productcategory productname producttype address country  productinitialrate productimage paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status')
 
 AuctionRegisterRouter.get("/getPendinguser",async (req,res)=>{
     // res.send("regster auction")
     try {
         console.log("pppp")
-        let data=await AuctionRegModel.find({status:false}).select('name email phoneno productcategory productname address country  productinitialrate productimage paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status').limit(10).lean()
+        let data=await AuctionRegModel.find({status:false}).limit(10).lean()
         res.send(data)
         console.log("pending data")
         
@@ -248,6 +258,20 @@ AuctionRegisterRouter.delete("/delete/:id", async (req, res) => {
         
     }
 
+})
+AuctionRegisterRouter.post("/getsearchnames",async (req,res)=>{
+    let type=req.body.typeofproduct
+    console.log(type,"type")
+    try {
+        const data=await AuctionRegModel.find({status:true,producttype:{ $regex: type, $options: "i" }}).select('productname producttype').limit(5).lean()
+        res.send(data)
+        console.log(data)
+        
+    } catch (error) {
+        res.send(error)
+        console.log(error)
+        
+    }
 })
 
 
