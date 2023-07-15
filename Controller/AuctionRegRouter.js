@@ -12,6 +12,7 @@ cacheClient.on('error', (error) => {
 
 const AuctionRegisterRouter=express()
 
+//   This route for get all the register user cards or data
 AuctionRegisterRouter.get("/getaucReg",async (req,res)=>{
     // res.send("regster auction")
     try {
@@ -25,6 +26,8 @@ AuctionRegisterRouter.get("/getaucReg",async (req,res)=>{
         
     }
 })
+
+// Get All Approved route 
 AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
     // res.send("regster auction")
     let query1=req.query.productcategory
@@ -167,6 +170,8 @@ AuctionRegisterRouter.get("/getApproveduser",async (req,res)=>{
 //   });
 // .select('name email phoneno productcategory productname producttype address country  productinitialrate productimage paymentmethode blockchainnetwork polygonnetwork blockchainaddress description  roomno status')
 
+
+// get all pending route
 AuctionRegisterRouter.get("/getPendinguser",async (req,res)=>{
     // res.send("regster auction")
     try {
@@ -182,9 +187,9 @@ AuctionRegisterRouter.get("/getPendinguser",async (req,res)=>{
     }
 })
 
-AuctionRegisterRouter.post("/auctionuserregister",async (req,res)=>{
-    
 
+//  post route for register for auction 
+AuctionRegisterRouter.post("/auctionuserregister",async (req,res)=>{
     try {
 
         const data=new  AuctionRegModel(req.body)
@@ -218,6 +223,7 @@ AuctionRegisterRouter.post("/auctionuserregister",async (req,res)=>{
 // })
 
 
+//  delete route for admin dont want this user to participate admin can delte register user
 AuctionRegisterRouter.delete("/delete/:id", async (req, res) => {
     const ID=req.params.id
     try {
@@ -231,6 +237,7 @@ AuctionRegisterRouter.delete("/delete/:id", async (req, res) => {
   });
 
 
+//    admin can approve the user register request
   AuctionRegisterRouter.patch("/approve/:id",async(req,res)=>{
     const ID=req.params.id
     const {adminStatus,roomid}=req.body
@@ -259,6 +266,8 @@ AuctionRegisterRouter.delete("/delete/:id", async (req, res) => {
     }
 
 })
+
+// search route it gives all search hints 
 AuctionRegisterRouter.post("/getsearchnames",async (req,res)=>{
     let type=req.body.typeofproduct
     console.log(type,"type")

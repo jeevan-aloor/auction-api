@@ -1,14 +1,17 @@
 const express=require('express')
 const {RegModel} =require("../Model/Registermodel")
 var jwt = require("jsonwebtoken");
+const { adminModel } = require('../Model/AdminLogin');
 
 const RegisterRouter=express()
 
-
+// get route 
 RegisterRouter.get("/userregister",(req,res)=>{
     res.send("register")
 })
 
+
+// post if this user is present or not 
 RegisterRouter.post("/exist",async (req,res)=>{
     const {email}=req.body 
     console.log(email,"addemail")
@@ -36,6 +39,7 @@ RegisterRouter.post("/exist",async (req,res)=>{
     // res.send("Register Page")
 })
 
+//  post user sign up details add to DB
 RegisterRouter.post("/register",async(req,res)=>{
     const {firstname,lastname,email,password}=req.body
     try {
@@ -67,6 +71,8 @@ RegisterRouter.post("/register",async(req,res)=>{
 
 })
 
+
+// user login route 
 RegisterRouter.post("/login",async(req,res)=>{
     const {email,password}=req.body
 
@@ -111,6 +117,8 @@ RegisterRouter.post("/login",async(req,res)=>{
 
 })
 
+
+//  create new password using forget route
 RegisterRouter.patch("/forget",async(req,res)=>{
     const {email,password}=req.body
     const payload={
@@ -138,6 +146,40 @@ RegisterRouter.patch("/forget",async(req,res)=>{
     }
 
 })
+
+RegisterRouter.post("/adminlogin",async(req,res)=>{
+
+    try {
+        let data=new adminModel(req.body)
+        await data.save()
+        res.send("admin data added to db")
+        
+    } catch (error) {
+        console.log(error)
+        res.send("not added")
+        
+    }
+})
+
+RegisterRouter.post("/getadmindata",async(req,res)=>{
+    let {email}=req.body
+
+    try {
+        let data=await adminModel.find({email})
+        console.log(data)
+        if(data.length>0){
+            res.send("This user is admin").status(200)
+        }else{
+            res.send("This user is not admin").status(404)
+        }
+        // res.send(data)
+    } catch (error) {
+        console.log(error)
+        res.status(400).send("error")
+        
+    }
+})
+
 
 
 
